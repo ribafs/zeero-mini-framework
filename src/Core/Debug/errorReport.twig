@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>App Error Reporting</title>
+</head>
+<style>
+   {% include "assets/css/styles.min.css" %}
+   {% include "assets/highlight/atom-one-dark-reasonable.min.css" %}
+</style>
+<body>
+
+	<!-- header -->
+	<header>
+		<h2 id="mbl" style="display: none;">Zeero</h2>
+		<h2 id="dkt">Zeero - Error Report</h2>
+
+		<h3>::
+			{{ _class }}</h3>
+
+	</header>
+
+	<!-- content -->
+
+	<div id="content">
+
+		<!-- informations -->
+
+		<div id="info">
+			<h3>Throwable Type:
+				<span>{{ base }} ( {{ item }} )</span>
+			</h3>
+
+			<h3>message:
+				<span>{{ _message }}
+				</span>
+			</h3>
+
+			<h3>
+				location:
+				<span>{{ exclude_basedir(_file, true) }} ({{ _line }}) </span>
+			</h3>
+
+			<h3 style="margin-bottom: 17px;">Stack Trace</h3>
+
+			<div id="stack">
+				<ol>
+					{% for item in _stack %}
+					{% if item.file is defined and  exclude_basedir(item.file) != null %}
+					<li>{{ exclude_basedir(item.file) }} ( {{ item.line }} ) </li>
+					{% endif %}
+					{% endfor %}
+				</ol>
+			</div>
+
+		</div>
+
+		<!-- code -->
+		<div id="code">
+			<h5>
+				{{ exclude_basedir(_f) }} ({{ _real_line }}) </h5>
+			<br>
+			<pre><code id="aa">{% for line in _f_lines %} {{ line }}{% endfor %}</code></pre>
+		</div>
+
+	</div>
+
+	<!-- end -->
+
+	<input type="hidden" id="l_value" value="{{ _f_line }}">
+
+    {% include "assets/highlight/highlight.min.js.twig" %}
+
+	<script>
+		hljs.highlightAll();
+
+		document.addEventListener("DOMContentLoaded", function () {
+			setTimeout(() => {
+				extractAnHighlightPriorityLine();
+			}, 800);
+		});
+	</script>
+
+	{% include "assets/js/script.js.twig" %}
+
+</body>
+
+</html>
